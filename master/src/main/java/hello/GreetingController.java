@@ -24,29 +24,28 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GreetingController {
 
-  private static final Logger log = LoggerFactory.getLogger(
-      GreetingController.class);
+	private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
 
-  @Autowired
-  private JmsTemplate jmsSender;
-  
-  @Autowired
-  private SimpMessageSendingOperations simpSender;
+	@Autowired
+	private JmsTemplate jmsSender;
 
-  @MessageMapping("/hello")
-  @SendTo("/topic/greetings")
-  public Greeting greeting(HelloMessage message) {
-    final Greeting greeting = new Greeting("Hello, " + message.getName() + "!");
-    jmsSender.convertAndSend("minion", greeting);
-    return greeting;
-  }
+	@Autowired
+	private SimpMessageSendingOperations simpSender;
 
-//  @JmsListener(destination = "greetings")
-//  @SendTo("/topic/greetings")
-//  public Greeting greeting(@Valid Greeting greeting) {
-//    log.info("Received greeting {}", greeting.getContent());
-//    simpSender.convertAndSend("/topic/greetings", greeting);
-//    return greeting;
-//  }
+	@MessageMapping("/hello")
+	@SendTo("/topic/greetings")
+	public Greeting greeting(HelloMessage message) {
+		final Greeting greeting = new Greeting("Hello, " + message.getName() + "!");
+		jmsSender.convertAndSend("minion", greeting);
+		return greeting;
+	}
+
+	// @JmsListener(destination = "greetings")
+	// @SendTo("/topic/greetings")
+	// public Greeting greeting(@Valid Greeting greeting) {
+	// log.info("Received greeting {}", greeting.getContent());
+	// simpSender.convertAndSend("/topic/greetings", greeting);
+	// return greeting;
+	// }
 
 }

@@ -23,17 +23,15 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GreetingController {
 
-  private static final Logger log = LoggerFactory.getLogger(
-      GreetingController.class);
+	private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
 
-  @Autowired
-  private SimpMessageSendingOperations sender;
+	@Autowired
+	private SimpMessageSendingOperations sender;
 
-  @JmsListener(destination = "minion")
-  public void greeting(@Valid Greeting greeting) {
-    log.info("Received greeting {}", greeting.getContent());
-    sender.convertAndSend("/topic/greetings", new Greeting(
-        greeting.getContent() + " -> Minion"));
-  }
+	@JmsListener(destination = "minion")
+	public void greeting(@Valid Greeting greeting) {
+		log.info("Received greeting {}", greeting.getContent());
+		sender.convertAndSend("/topic/greetings", new Greeting(greeting.getContent() + " -> Minion"));
+	}
 
 }

@@ -27,30 +27,28 @@ import org.springframework.jms.support.destination.DynamicDestinationResolver;
 @EnableJms
 public class JmsConfig {
 
-  @Bean
-  public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
-    DefaultJmsListenerContainerFactory factory
-        = new DefaultJmsListenerContainerFactory();
-    factory.setConnectionFactory(connectionFactory());
-    factory.setDestinationResolver(destinationResolver());
-    factory.setConcurrency("1");
-    return factory;
-  }
+	@Bean
+	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		factory.setConnectionFactory(connectionFactory());
+		factory.setDestinationResolver(destinationResolver());
+		factory.setConcurrency("1");
+		return factory;
+	}
 
-  @Bean
-  public ConnectionFactory connectionFactory() {
-    return new CachingConnectionFactory(
-        new ActiveMQConnectionFactory("failover:(tcp://127.0.0.1:61616)"));
-  }
+	@Bean
+	public ConnectionFactory connectionFactory() {
+		return new CachingConnectionFactory(new ActiveMQConnectionFactory("failover:(tcp://127.0.0.1:61616)"));
+	}
 
-  @Bean
-  public DestinationResolver destinationResolver() {
-    return new DynamicDestinationResolver();
-  }
-  
-  @Bean
-  public JmsTemplate jmsTemplate() {
-    return new JmsTemplate(connectionFactory());
-  }
+	@Bean
+	public DestinationResolver destinationResolver() {
+		return new DynamicDestinationResolver();
+	}
+
+	@Bean
+	public JmsTemplate jmsTemplate() {
+		return new JmsTemplate(connectionFactory());
+	}
 
 }

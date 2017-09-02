@@ -1,6 +1,6 @@
 ## Prerequisites
 
-One must have ```docker``` installed.
+One must have ```docker``` installed. Otherwise, you can use ActiveMQ, download from website and start
 
 If you're on Mac OS X, run:
 

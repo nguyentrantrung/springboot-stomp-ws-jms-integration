@@ -26,7 +26,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
@@ -53,6 +52,12 @@
 			<version>${springframework.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-messaging</artifactId>
+			<version>4.0.1.RELEASE</version>
+		</dependency>
+		
 		<!-- hot swapping, disable cache for template, enable live reload -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

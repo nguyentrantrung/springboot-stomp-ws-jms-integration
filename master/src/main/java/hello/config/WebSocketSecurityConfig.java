@@ -12,6 +12,7 @@
  */
 package hello.config;
 
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 
@@ -19,6 +20,7 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 
 	@Override
 	protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+		messages.simpTypeMatchers(SimpMessageType.CONNECT).permitAll();
 		// messages.simpDestMatchers("/hello/**").authenticated().simpSubscribeDestMatchers("/topic/**").authenticated()
 		// .simpSubscribeDestMatchers("/user/**").denyAll().simpSubscribeDestMatchers("/user/**").hasRole("USER").anyMessage().authenticated();
 		messages.simpSubscribeDestMatchers("/user/**").denyAll();

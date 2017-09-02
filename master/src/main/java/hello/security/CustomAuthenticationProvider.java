@@ -29,12 +29,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String name = authentication.getName();
-		String password = authentication.getCredentials().toString();
+		String password = authentication.getCredentials()!=null? authentication.getCredentials().toString():"";
 
 		if ("user".equals(name)) {
 
 			List<GrantedAuthority> grantedAuths = new ArrayList<>();
-			grantedAuths.add(new SimpleGrantedAuthority("USER"));
+			grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
 			Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
 			return auth;
 		}
@@ -42,7 +42,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		if ("admin".equals(name)) {
 
 			List<GrantedAuthority> grantedAuths = new ArrayList<>();
-			grantedAuths.add(new SimpleGrantedAuthority("ADMIN"));
+			grantedAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
 			return auth;
 		}

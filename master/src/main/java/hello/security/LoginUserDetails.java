@@ -49,7 +49,7 @@ public class LoginUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> grantedAuths = new ArrayList<>();
-		grantedAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		grantedAuths.add(new SimpleGrantedAuthority("ADMIN"));
 		return grantedAuths;
 	}
 

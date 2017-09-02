@@ -107,7 +107,7 @@
         &copy; 2017
             <span sec:authorize="isAuthenticated()">
                 | Logged user: <span sec:authentication="name"></span> |
-                Roles: 
+                Roles: <span sec:authentication="authorities"></span> |
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
 

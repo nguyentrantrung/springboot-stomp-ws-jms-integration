@@ -1,0 +1,54 @@
+<!-- Licensed under the Apache License, Version 2.0 (the "License"); you 
+	may not use this file except in compliance with the License. You may obtain 
+	a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless 
+	required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:component-scan base-package="hello" />
+
+	<http auto-config="true">
+		<csrf disabled="true" />
+		<access-denied-handler ref="accessDeniedHandler" />
+
+		<intercept-url pattern="/admin/**" access="hasAnyRole('ADMIN')" />
+		<intercept-url pattern="/user/**" access="hasAnyRole('USER')" />
+
+		<intercept-url pattern="/" access="permitAll()" />
+		<intercept-url pattern="/hello/**" access="permitAll()" />
+		<intercept-url pattern="/home" access="permitAll()" />
+		<intercept-url pattern="/login" access="permitAll()" />
+		<intercept-url pattern="/j_spring_security_check"
+			access="permitAll()" />
+		<intercept-url pattern="/about" access="permitAll()" />
+		<intercept-url pattern="/webjars/**" access="permitAll()" />
+		<intercept-url pattern="/js/**" access="permitAll()" />
+
+		<form-login login-page="/login" authentication-failure-url="/error"
+			username-parameter="username" password-parameter="password"
+			default-target-url="/" login-processing-url="/j_spring_security_check" />
+
+		<logout logout-url="/logout" logout-success-url="/"
+			delete-cookies="SPRING_SECURITY_REMEMBER_ME_COOKIE,JSESSIONID" />
+
+	</http>
+	<beans:bean id="accessDeniedHandler" class="hello.error.MyAccessDeniedHandler" />
+
+	<beans:bean id="customAuthenticationProvider" class="hello.security.CustomAuthenticationProvider" />
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="customAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="loginUserDetailsService"
+		class="hello.security.LoginUserDetailsService" />
+</beans:beans>  

@@ -17,8 +17,11 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
 
 public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
+	@Override
 	protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-		messages.simpDestMatchers("/hello/**").authenticated().simpSubscribeDestMatchers("/topic/**").authenticated()
-				.anyMessage().authenticated();
+		// messages.simpDestMatchers("/hello/**").authenticated().simpSubscribeDestMatchers("/topic/**").authenticated()
+		// .simpSubscribeDestMatchers("/user/**").denyAll().simpSubscribeDestMatchers("/user/**").hasRole("USER").anyMessage().authenticated();
+		messages.simpSubscribeDestMatchers("/user/**").denyAll();
+		messages.simpDestMatchers("/hello/**").denyAll();
 	}
 }

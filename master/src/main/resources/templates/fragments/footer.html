@@ -19,6 +19,8 @@
 	        }
 	        
 	        function connect() {
+	        	document.getElementById('connect').disabled = true;
+	        	
 	            var socket = new SockJS('/hello');
 	            stompClient = Stomp.over(socket);            
 	            stompClient.connect({}, function(frame) {
@@ -105,10 +107,12 @@
         &copy; 2017
             <span sec:authorize="isAuthenticated()">
                 | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
+                Roles: 
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
 
+        <script type="text/javascript"
+                src="webjars/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript"
                 src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 

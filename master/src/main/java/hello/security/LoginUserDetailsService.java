@@ -10,20 +10,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package hello;
+package hello.security;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-@ComponentScan
-@EnableAutoConfiguration
-@ImportResource("classpath:app-config.xml")
-public class Application {
+public class LoginUserDetailsService implements UserDetailsService {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+		LoginUserDetails myUserDetail = new LoginUserDetails(username);
+
+		return myUserDetail;
 	}
-
 }

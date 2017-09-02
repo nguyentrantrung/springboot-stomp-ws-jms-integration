@@ -12,12 +12,14 @@
  */
 package hello;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
@@ -33,19 +35,15 @@ public class GreetingController {
 	private SimpMessageSendingOperations simpSender;
 
 	@MessageMapping("/hello")
-	@SendTo("/topic/greetings")
 	public Greeting greeting(HelloMessage message) {
 		final Greeting greeting = new Greeting("Hello, " + message.getName() + "!");
-		jmsSender.convertAndSend("minion", greeting);
+		jmsSender.convertAndSend("request", greeting);
 		return greeting;
 	}
 
-	// @JmsListener(destination = "greetings")
-	// @SendTo("/topic/greetings")
-	// public Greeting greeting(@Valid Greeting greeting) {
-	// log.info("Received greeting {}", greeting.getContent());
-	// simpSender.convertAndSend("/topic/greetings", greeting);
-	// return greeting;
-	// }
-
+	@JmsListener(destination = "response")
+	public void greeting(@Valid Greeting greeting) {
+		log.info("Received greeting {}", greeting.getContent());
+		simpSender.convertAndSend("/topic/greetings", new Greeting(greeting.getContent()));
+	}
 }

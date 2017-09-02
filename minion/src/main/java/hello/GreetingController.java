@@ -13,11 +13,12 @@
 package hello;
 
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -26,12 +27,12 @@ public class GreetingController {
 	private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
 
 	@Autowired
-	private SimpMessageSendingOperations sender;
+	private JmsTemplate jmsSender;
 
-	@JmsListener(destination = "minion")
+	@JmsListener(destination = "request")
 	public void greeting(@Valid Greeting greeting) {
 		log.info("Received greeting {}", greeting.getContent());
-		sender.convertAndSend("/topic/greetings", new Greeting(greeting.getContent() + " -> Minion"));
+		jmsSender.convertAndSend("response", new Greeting(greeting.getContent() + " -> Minion"));
 	}
 
 }

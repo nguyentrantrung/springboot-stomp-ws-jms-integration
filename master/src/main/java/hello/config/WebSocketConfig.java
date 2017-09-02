@@ -27,6 +27,8 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 		config.enableStompBrokerRelay("/topic", "/queue").setRelayHost("localhost").setRelayPort(61613)
 				.setSystemHeartbeatSendInterval(20000).setSystemHeartbeatReceiveInterval(20000);
 		config.setApplicationDestinationPrefixes("/app");
+		
+		config.enableSimpleBroker("/queue");
 	}
 
 	@Override

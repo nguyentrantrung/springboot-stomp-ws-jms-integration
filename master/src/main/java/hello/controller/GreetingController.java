@@ -19,12 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Controller;
 
 import hello.model.Greeting;
 import hello.model.HelloMessage;
+import hello.model.Scoring;
 
 @Controller
 public class GreetingController {
@@ -44,9 +48,30 @@ public class GreetingController {
 		return greeting;
 	}
 
+	@MessageMapping("/score")
+	public Scoring scoring(HelloMessage message, SimpMessageHeaderAccessor accessor) {
+		final Scoring scoring = new Scoring(accessor.getSessionId(), "Score, " + message.getName() + "!");
+		jmsSender.convertAndSend("requestScore", scoring);
+		return scoring;
+	}
+
 	@JmsListener(destination = "response")
 	public void greeting(@Valid Greeting greeting) {
 		log.info("Received greeting {}", greeting.getContent());
 		simpSender.convertAndSend("/topic/greetings", new Greeting(greeting.getContent()));
+	}
+
+	private MessageHeaders createHeaders(String sessionId) {
+		SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+		headerAccessor.setSessionId(sessionId);
+		headerAccessor.setLeaveMutable(true);
+		return headerAccessor.getMessageHeaders();
+	}
+
+	@JmsListener(destination = "responseScore")
+	public void scoring(@Valid Scoring scoring) {
+		log.info("Received scoring {}", scoring.getContent());
+		simpSender.convertAndSendToUser(scoring.getSessionId(), "/topic/scoring", new Greeting(scoring.getContent()),
+				createHeaders(scoring.getSessionId()));
 	}
 }

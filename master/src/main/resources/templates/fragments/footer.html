@@ -5,6 +5,99 @@
 <body>
 <div th:fragment="footer">
 
+	<div class="container">
+	    <script src="js/sockjs-0.3.4.js"></script>
+	    <script src="js/stomp.js"></script>
+	    <script type="text/javascript">
+	        var stompClient = null;
+	        
+	        function setConnected(connected) {
+	            document.getElementById('connect').disabled = connected;
+	            document.getElementById('disconnect').disabled = !connected;
+	            document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+	            document.getElementById('response').innerHTML = '';
+	        }
+	        
+	        function connect() {
+	            var socket = new SockJS('/hello');
+	            stompClient = Stomp.over(socket);            
+	            stompClient.connect({}, function(frame) {
+	                setConnected(true);
+	                console.log('Connected: ' + frame);
+	                
+	                stompClient.subscribe('/topic/greetings', function(greeting){
+	                    showGreeting(JSON.parse(greeting.body).content);
+	                });
+	                
+	                stompClient.subscribe('/user/topic/scoring', function(score){
+	                	showScore(JSON.parse(score.body).content);
+	                });
+	            });
+	        }
+	        
+	        function disconnect() {
+	            stompClient.disconnect();
+	            setConnected(false);
+	            console.log("Disconnected");
+	        }
+	        
+	        function sendName() {
+	            var name = document.getElementById('name').value;
+	            stompClient.send("/app/hello", {}, JSON.stringify({ 'name': name }));
+	        }
+
+	        function sendScore() {
+	            var score = document.getElementById('score').value;
+	            stompClient.send("/app/score", {}, JSON.stringify({ 'name': score }));
+	        }
+	        
+	        function showGreeting(message) {
+	            var response = document.getElementById('response');
+	            var p = document.createElement('p');
+	            p.style.wordWrap = 'break-word';
+	            p.appendChild(document.createTextNode(message));
+	            response.appendChild(p);
+	        }
+	        
+	        function showScore(message) {
+	            var response = document.getElementById('responseScore');
+	            var p = document.createElement('p');
+	            p.style.wordWrap = 'break-word';
+	            p.appendChild(document.createTextNode(message));
+	            response.appendChild(p);
+	        }
+	    </script>
+
+		<div>
+			CONNECTION
+		</div>	                          
+	    <div>
+	        <button id="connect" onclick="connect();">Connect</button>
+	        <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+	    </div>
+	    
+		<div>
+			TOPIC
+		</div>
+	    
+	    <div id="conversationDiv">
+	        <label>What is your name?</label><input type="text" id="name" />
+	        <button id="sendName" onclick="sendName();">Send</button>
+	        <p id="response"></p>
+	    </div>
+
+		<div>
+			APP
+		</div>
+	    
+	    <div id="conversationDiv">
+	        <label>Check my score</label><input type="text" id="score" />
+	        <button id="sendScore" onclick="sendScore();">Send</button>
+	        <p id="responseScore"></p>
+	    </div>
+	    			                          
+    </div>
+
     <div class="container">
 
         <footer>

@@ -22,6 +22,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 
 import hello.model.Greeting;
+import hello.model.Scoring;
 
 @Controller
 public class GreetingController {
@@ -35,6 +36,13 @@ public class GreetingController {
 	public void greeting(@Valid Greeting greeting) {
 		log.info("Received greeting {}", greeting.getContent());
 		jmsSender.convertAndSend("response", new Greeting(greeting.getContent() + " -> Minion"));
+	}
+
+	@JmsListener(destination = "requestScore")
+	public void scoring(@Valid Scoring scoring) {
+		log.info("Received scoring {}", scoring.getContent());
+		jmsSender.convertAndSend("responseScore",
+				new Scoring(scoring.getSessionId(), scoring.getContent() + " -> Score"));
 	}
 
 }

@@ -21,6 +21,8 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 
+import hello.model.Greeting;
+
 @Controller
 public class GreetingController {
 

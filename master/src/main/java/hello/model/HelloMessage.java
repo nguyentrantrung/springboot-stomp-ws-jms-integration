@@ -10,20 +10,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package hello;
+package hello.model;
 
-import java.io.Serializable;
+public class HelloMessage {
 
-public class Greeting implements Serializable {
+	private String name;
 
-  private final String content;
-
-  public Greeting(String content) {
-    this.content = content;
-  }
-
-  public String getContent() {
-    return content;
-  }
+	public String getName() {
+		return name;
+	}
 
 }

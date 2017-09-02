@@ -10,7 +10,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package hello;
+package hello.controller;
 
 import javax.validation.Valid;
 
@@ -22,6 +22,9 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+
+import hello.model.Greeting;
+import hello.model.HelloMessage;
 
 @Controller
 public class GreetingController {

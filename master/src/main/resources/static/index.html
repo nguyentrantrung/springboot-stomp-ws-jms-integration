@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Hello WebSocket</title>
-    <script src="sockjs-0.3.4.js"></script>
-    <script src="stomp.js"></script>
+    <script src="js/sockjs-0.3.4.js"></script>
+    <script src="js/stomp.js"></script>
     <script type="text/javascript">
         var stompClient = null;
         
@@ -34,7 +34,7 @@
         
         function sendName() {
             var name = document.getElementById('name').value;
-            stompClient.send("/app/hello", {}, JSON.stringify({ 'name': name }));
+            stompClient.send("/secured/hello", {}, JSON.stringify({ 'name': name }));
         }
         
         function showGreeting(message) {

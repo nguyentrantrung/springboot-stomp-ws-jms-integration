@@ -12,8 +12,6 @@
  */
 package hello;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +31,13 @@ public class GreetingController {
 	private JmsTemplate jmsSender;
 
 	@JmsListener(destination = "request")
-	public void greeting(@Valid Greeting greeting) {
+	public void greeting(Greeting greeting) {
 		log.info("Received greeting {}", greeting.getContent());
 		jmsSender.convertAndSend("response", new Greeting(greeting.getContent() + " -> Minion"));
 	}
 
 	@JmsListener(destination = "requestScore")
-	public void scoring(@Valid Scoring scoring) {
+	public void scoring(Scoring scoring) {
 		log.info("Received scoring {}", scoring.getContent());
 		jmsSender.convertAndSend("responseScore",
 				new Scoring(scoring.getSessionId(), scoring.getContent() + " -> Score"));

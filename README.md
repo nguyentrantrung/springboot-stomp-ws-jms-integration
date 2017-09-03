@@ -43,4 +43,5 @@ mvn spring-boot:run
 
 ## Test
 
-Point your browser to ```http://localhost:8080``` and send a message. Should receive two greetings (one from master, another from minion).
+1. Guest cannot SUBSCRIBE /user/** 
+2. Score update for current session, other session cannot get message in /user/** topic
